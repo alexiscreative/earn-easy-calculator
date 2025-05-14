@@ -3,9 +3,11 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { componentTagger } from "lovable-tagger";
+import type { ConfigEnv, UserConfig } from "vite";
+import type { PreRenderedChunk } from "rollup";
 
 // https://vitejs.dev/config/
-export default defineConfig(({ mode }) => ({
+export default defineConfig(({ mode }: ConfigEnv): UserConfig => ({
   server: {
     host: "::",
     port: 8080,
@@ -30,13 +32,13 @@ export default defineConfig(({ mode }) => ({
       output: {
         // Generate standalone file for the webflow embed
         manualChunks: undefined,
-        entryFileNames: (chunkInfo) => {
+        entryFileNames: (chunkInfo: PreRenderedChunk) => {
           return chunkInfo.name === 'webflowEmbed' 
             ? 'assets/webflow-embed.[hash].js' 
             : 'assets/[name].[hash].js';
         },
         format: 'iife', // Use immediately-invoked function expression format for direct browser use
-        inlineDynamicImports: chunkInfo => chunkInfo.name === 'webflowEmbed' // Inline imports for the webflow embed
+        inlineDynamicImports: true // Changed from a function to a boolean
       }
     },
     // Don't minify the webflow embed for better debugging
