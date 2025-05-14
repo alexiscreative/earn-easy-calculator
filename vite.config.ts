@@ -28,14 +28,18 @@ export default defineConfig(({ mode }) => ({
         webflowEmbed: path.resolve(__dirname, 'src/webflow-embed.tsx')
       },
       output: {
-        // Generate UMD format for the webflow embed
+        // Generate standalone file for the webflow embed
         manualChunks: undefined,
         entryFileNames: (chunkInfo) => {
           return chunkInfo.name === 'webflowEmbed' 
             ? 'assets/webflow-embed.[hash].js' 
             : 'assets/[name].[hash].js';
-        }
+        },
+        format: 'iife', // Use immediately-invoked function expression format for direct browser use
+        inlineDynamicImports: chunkInfo => chunkInfo.name === 'webflowEmbed' // Inline imports for the webflow embed
       }
-    }
+    },
+    // Don't minify the webflow embed for better debugging
+    minify: mode === 'production' ? 'esbuild' : false
   }
 }));

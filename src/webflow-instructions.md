@@ -13,36 +13,46 @@ Follow these steps to integrate the UK Salary Calculator into your Webflow site:
 
 ## Option 2: Direct Script Embedding (Advanced)
 
-1. Build your React app with a bundler that supports UMD or IIFE output
-2. Configure your bundler to output a single JS file with all dependencies included
-3. Host this JS file and your CSS file on a CDN or file hosting service
-4. In Webflow, add an "Embed" element with this HTML:
+1. Build your app by running `npm run build` in your project terminal
+2. Navigate to the `dist/assets` folder in your project
+3. Look for a file named `webflow-embed.[hash].js` - this is your standalone calculator script
+4. Also find the CSS file(s) in the assets folder
+5. Upload both files to a file hosting service or your own server
+6. In Webflow, add an "Embed" element with this HTML (replace URLs with your hosted file locations):
 
 ```html
 <!-- Container for the calculator -->
 <div id="uk-salary-calculator-root"></div>
 
-<!-- Load the required scripts -->
+<!-- Load the styles and script -->
 <link href="https://your-hosting.com/path/to/styles.css" rel="stylesheet">
-<script src="https://your-hosting.com/path/to/bundle.js"></script>
-<script>
-  // Initialize the calculator when the script is loaded
-  document.addEventListener('DOMContentLoaded', function() {
-    if (window.initUKSalaryCalculator) {
-      window.initUKSalaryCalculator();
-    }
-  });
-</script>
+<script src="https://your-hosting.com/path/to/webflow-embed.[hash].js"></script>
 ```
 
-## Styling Considerations
+## Downloading the Files
 
-- The calculator uses Tailwind CSS, which is scoped to prevent conflicts
-- You may need to adjust CSS to match your Webflow site's styling
-- Use the browser inspector to identify any CSS conflicts
+After building your app with `npm run build`:
+
+1. If using Lovable's online editor:
+   - Click "Dev Mode" in the top left corner
+   - Navigate to the `dist/assets` folder
+   - Right-click on the required files and select "Download"
+
+2. If working locally:
+   - Navigate to the `dist/assets` folder in your file explorer
+   - Copy the required JS and CSS files
+
+## Testing Your Embedding
+
+Before deploying to your live Webflow site, you can test the embedding locally:
+
+1. Create a simple HTML file on your computer
+2. Add the embedding code from Option 2 above
+3. Replace the file paths with the relative paths to your local files
+4. Open the HTML file in a browser to check if the calculator works
 
 ## Troubleshooting
 
-- If the calculator doesn't appear, check the browser console for errors
-- Ensure all scripts are loading correctly (no CORS issues)
-- For iFrame embedding, make sure the frame has sufficient height
+- Check your browser's console for any errors (F12 to open developer tools)
+- Ensure your CSS and JS files are accessible from your Webflow site
+- If you see CORS errors, make sure your hosting service allows cross-origin requests
